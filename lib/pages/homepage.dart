@@ -1,101 +1,3 @@
-// import 'dart:async';
-// import 'package:flutter/material.dart';
-// import 'package:supabase_flutter/supabase_flutter.dart';
-// import 'package:expense_manager/main.dart';
-// import 'package:supabase_auth_ui/supabase_auth_ui.dart';
-// import 'account_page.dart';
-// import 'login_page.dart';
-
-// class HomePage extends StatefulWidget {
-//   const HomePage({Key? key}) : super(key: key);
-
-//   @override
-//   _HomePageState createState() => _HomePageState();
-// }
-
-// final supabase = Supabase.instance.client;
-
-// class _HomePageState extends State<HomePage> {
-//   late final StreamSubscription<AuthUser?> _authUserSubscription;
-//   List<Map<String, dynamic>> expenses = [];
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     fetchExpenses();
-//   }
-
-//   Future<void> fetchExpenses() async {
-//     // Fetch expenses from Supabase database
-//     final response = await supabase
-//         .from('expense_manager')
-//         .select('${supabase.auth.currentUser?.email}').execute();
-//     if (response != null) {
-//       // Update expenses list with fetched data
-//       setState(() {
-//         expenses = response as List<Map<String, dynamic>>;
-//       });
-//     } else {
-//       // Handle error
-//       print('Error fetching expenses');
-//     }
-//   }
-
-//   @override
-//   void dispose() {
-//     _authUserSubscription.cancel();
-//     super.dispose();
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//         appBar: AppBar(
-//           title: const Text('Expense Tracker'),
-//           actions: [
-//             IconButton(
-//               icon: const Icon(Icons.account_circle),
-//               onPressed: () {
-//                 Navigator.of(context).pushNamed('/account');
-//               },
-//             ),
-//             ElevatedButton(
-//               onPressed: () async {
-//                 await supabase.auth.signOut();
-//                 Navigator.of(context).pushNamed('/login');
-//               },
-//               child: const Text('Sign Out'),
-//             ),
-//           ],
-//         ),
-//         body: Center(
-//           child: ListView.builder(
-//               itemCount: expenses.length,
-//               itemBuilder: (context, index) {
-//                 final expense = expenses[index];
-//                 return ListTile(
-//                     leading: const Icon(Icons.list),
-//                     trailing: const Text(
-//                       "data",
-//                       style: TextStyle(color: Colors.green, fontSize: 15),
-//                     ),
-//                     title: Text(expense['name'].toString()),
-//                     subtitle: Text('\$${expense['amount']}'));
-//               }),
-//         ),
-//         floatingActionButton: IconButton(
-//           color: Colors.black,
-//           style: ButtonStyle(
-//             backgroundColor: MaterialStateProperty.all(Colors.green),
-//           ),
-//           icon: const Icon(Icons.add),
-//           onPressed: () {
-//             Navigator.of(context).pushNamed('/add');
-//           },
-//         ));
-//   }
-// }
-
 import 'package:flutter/material.dart';
 import 'package:expense_manager/main.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -229,19 +131,22 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(curruser.toString()),
+        title: const Text('Expense Tracker'),
       ),
       body: Column(
         children: [
-          Container(
-            width: MediaQuery.of(context).size.width * 0.9,
-            color: Color.fromARGB(110, 255, 143, 143),
-            child: const Center(
-              child: Text(
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
-                  "  -ve amount denotes amount to give\n  +ve amount denotes amount to take\n"),
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.045,
+            child: Container(
+              width: MediaQuery.of(context).size.width * 1,
+              color: Color.fromARGB(110, 255, 143, 143),
+              child: const Center(
+                child: Text(
+                    style: TextStyle(
+                      color: Colors.black,
+                    ),
+                    "  -ve amount denotes amount to give\n  +ve amount denotes amount to take\n"),
+              ),
             ),
           ),
           SizedBox(
@@ -313,14 +218,17 @@ class _HomePageState extends State<HomePage> {
                           });
                     }
 
-                    return ListTile(
-                      leading: IconButton(
-                          onPressed: sendMessage,
-                          icon: const Icon(Icons.message)),
-                      trailing: IconButton(
-                          onPressed: editAmount, icon: const Icon(Icons.edit)),
-                      title: Text(table['name'].toString()),
-                      subtitle: Text('Rs.${table['amount'].toString()}'),
+                    return Card(
+                      child: ListTile(
+                        trailing: IconButton(
+                            onPressed: sendMessage,
+                            icon: const Icon(Icons.message)),
+                        leading: IconButton(
+                            onPressed: editAmount,
+                            icon: const Icon(Icons.edit)),
+                        title: Text(table['name'].toString()),
+                        subtitle: Text('Rs.${table['amount'].toString()}'),
+                      ),
                     );
                   }),
                 );
